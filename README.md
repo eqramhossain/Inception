@@ -38,7 +38,7 @@ Docker container
 ```
 
 
-What is a readymade Docker image ?
+What is a readmade Docker image ?
 
 What is a Docker compose ?
 
