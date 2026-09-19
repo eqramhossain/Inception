@@ -34,6 +34,23 @@
         <p>
             Inception Project - 42
         </p>
+    <h2>Data from MariaDB:</h2>
+    <div id="data-container">Loading data...</div>
+
+    <script>
+        // Call your backend API container (running on port 5000)
+        fetch('http://localhost:5000/api/users')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('data-container');
+                container.innerHTML = JSON.stringify(data);
+            })
+            .catch(err => {
+                document.getElementById('data-container').innerText = 'Error loading data';
+                console.error(err);
+            });
+    </script>
+
     </center>
 
 </body>
