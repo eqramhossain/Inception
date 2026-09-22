@@ -618,34 +618,63 @@ Docker daemon automatically create three defaults network. You can check them wi
 # Resouces
 
 
-[Docker Curriculum | Docker Curriculum](https://docker-curriculum.com/) 
+[Docker Curriculum | Docker Curriculum](https://docker-curriculum.com/)
+
 [Docker Crash Course #1 - What is Docker? - YouTube](https://www.youtube.com/watch?v=31ieHmcTUOk&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7) 
+
 [Optimize Your Deployment With Docker Containers - OpenClassrooms](https://openclassrooms.com/fr/courses/7905646-optimize-your-deployment-with-docker-containers) 
+
 [Dockerfile reference | Docker Docs](https://docs.docker.com/reference/dockerfile)
+
 [Writing a Dockerfile: Beginners to Advanced - DEV Community](https://dev.to/prodevopsguytech/writing-a-dockerfile-beginners-to-advanced-31ie) 
+
 [Reference documentation | Docker Docs](https://docs.docker.com/reference/) 
+
 [docker_cheatsheet.pdf](https://docs.docker.com/get-started/docker_cheatsheet.pdf) 
+
 [Docker Best Practices: Choosing Between RUN, CMD, and ENTRYPOINT | Docker](https://www.docker.com/blog/docker-best-practices-choosing-between-run-cmd-and-entrypoint/) 
-[Docker Run Command with Examples | Linuxize](https://linuxize.com/post/docker-run-command/) 
+
+[Docker Run Command with Examples | Linuxize](https://linuxize.com/post/docker-run-command/)
+
 [How to Build Docker Images with Dockerfile | Linuxize](https://linuxize.com/post/how-to-build-docker-images-with-dockerfile/) 
+
 [Docker Compose: Define and Run Multi-Container Apps | Linuxize](https://linuxize.com/post/docker-compose/) 
+
 [How to Remove Docker Images, Containers, Volumes, and Networks | Linuxize](https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/) 
+
 [Docker - Container for NGINX - GeeksforGeeks](https://www.geeksforgeeks.org/devops/docker-container-for-nginx/) 
+
 [Using The NGINX Docker Image | Octopus blog](https://octopus.com/blog/using-nginx-docker-image) 
+
 [How to Use Docker Volumes for Persistent Data](https://oneuptime.com/blog/post/2026-02-02-docker-volumes-persistent-data/view) 
+
 [How to Run Nginx in Docker](https://oneuptime.com/blog/post/2026-01-25-nginx-docker/view)
+
 [Storage | Docker Docs](https://docs.docker.com/engine/storage/) [Volumes | Docker Docs](https://docs.docker.com/engine/storage/volumes/) 
+
 [Building best practices | Docker Docs](https://docs.docker.com/build/building/best-practices/) 
+
 [Compose file reference | Docker Docs](https://docs.docker.com/reference/compose-file/) 
+
 [Dockerfile reference | Docker Docs](https://docs.docker.com/reference/dockerfile/?utm_source=chatgpt.com) 
+
 [Writing a Dockerfile | Docker Docs](https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/) 
+
 [Networking overview | Docker Docs](https://docs.docker.com/engine/network/) 
+
 [What Is Docker Networking? A Practical Guide](https://www.aquasec.com/cloud-native-academy/docker-container/docker-networking/) 
+
 [Networking in Compose | Docker Docs](https://docs.docker.com/compose/how-tos/networking/) 
+
 [Bridge network driver | Docker Docs](https://docs.docker.com/engine/network/drivers/bridge/) 
+
 [Introduction to Docker Networking | Refine](https://refine.dev/blog/docker-networking/#bridge-docker0) 
+
 [Manage sensitive data with Docker secrets | Docker Docs](https://docs.docker.com/engine/swarm/secrets/) 
+
 [Understanding the Nginx Configuration File Structure and Configuration Contexts | DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-the-nginx-configuration-file-structure-and-configuration-contexts) 
+
 [Beginner’s Guide](https://nginx.org/en/docs/beginners_guide.html) [Configuring HTTPS servers](https://nginx.org/en/docs/http/configuring_https_servers.html) 
+
 [Configuring HTTPS/TLS on nginx: A Complete Guide for Securing Web Traffic](https://travishorn.com/configuring-httpstls-on-nginx-a-complete-guide-for-securing-web-traffic/)
 
