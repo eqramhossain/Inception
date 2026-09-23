@@ -1,14 +1,18 @@
 FROM debian:bookworm-slim
 
-MAINTAINER "ehossain <ehossain.student.42.fr>"
 
-LABEL image.title="Inception NGINX"
+LABEL image.maintainer="ehossain" \
+	image.maintainer_email="ehossain@student.42.fr" \
+	image.title="Inception NGINX"
 
 WORKDIR /var/www/html/
 
-RUN apt-get update && \
-	apt-get install --no-install-recommends -y nginx vim openssl \
-	rm -rf /var/lib/apt/lists
+RUN apt-get update && apt-get install --no-install-recommends -y \
+	curl \
+	vim \
+	openssl \
+	nginx \
+	&& rm -rf /var/lib/apt/lists/*
 
 COPY ./files/index.html .
 
@@ -16,7 +20,15 @@ EXPOSE 80
 
 SHELL ["/bin/bash", "-c"]
 
-RUN useradd -m nginx_user
+# Debian's NGINX package automatically creates a user named 'www-data' 
+# and creates all runtime directories under its ownership. 
+# update the permissions so 'nginx_user' can access them.
+# first part user_owner and second part group_owner
+RUN useradd -m nginx_user \
+	&& chown -R nginx_user:nginx_user /var/www/html \
+	&& chown -R nginx_user:nginx_user /var/lib/nginx \
+	&& chown -R nginx_user:nginx_user /var/log/nginx \
+	&& chown -R nginx_user:nginx_user /etc/nginx
 
 USER nginx_user
 
