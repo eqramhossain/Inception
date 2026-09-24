@@ -34,6 +34,9 @@ RUN chmod +x /usr/bin/script.sh
 # SIGTERM causes Nginx to shut down immediately.
 STOPSIGNAL SIGQUIT
 
+HEALTHCHECK --interval=30s --timeout=3s \
+	CMD curl -fsSk https://localhost:443 || exit 1
+
 ENTRYPOINT ["/usr/bin/script.sh"]
 
 # argument to the shell script above
