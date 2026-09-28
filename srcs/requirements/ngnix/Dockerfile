@@ -1,26 +1,18 @@
 FROM debian:bookworm-slim
 
-LABEL image.maintainer="ehossain"\
-image.maintainer.email="ehossain@student.42.fr"\
-image.name="Inception"
-
-EXPOSE 443
-
-RUN apt-get update && apt-get install --no-install-recommends -y \
-	ca-certificates \
-	vim \
-	curl \
-	nginx \
-	openssl \
-	&& apt-get autoremove \
-	&& rm -rf /var/lib/apt/lists/*
+LABEL image.maintainer="ehossain" \
+	image.maintainer.email="ehossain@student.42.fr"
 
 WORKDIR /usr/bin/
+
+RUN apt-get update && apt-get install --no-install-recommends -y ca-certificates vim curl nginx openssl && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 COPY ./tools/script.sh .
 RUN chmod +x /usr/bin/script.sh
 
 COPY ./conf/nginx.conf /etc/nginx/conf.d/nginx.conf
+
+EXPOSE 443
 
 STOPSIGNAL SIGQUIT
 
