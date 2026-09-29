@@ -20,6 +20,6 @@ STOPSIGNAL SIGQUIT
 HEALTHCHECK --interval=30s --timeout=3s \
 	CMD curl -fsSk https://localhost:443 > /dev/null || exit 1
 
-ENTRYPOINT ["./script.sh"]
+ENTRYPOINT ["bash", "./script.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,12 @@
+.git
+.gitignore
+
+*.log
+logs/
+
+secrets/
+*.env
+
+*.swp
+
+*.key
