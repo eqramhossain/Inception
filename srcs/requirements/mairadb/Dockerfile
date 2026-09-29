@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 WORKDIR /usr/bin/
 
 COPY ./tools/script.sh .
-RUN chmod +x script.sh
+COPY ./conf/my.cnf /etc/mysql/
+RUN chmod +x script.sh 
 
 EXPOSE 3306
 
