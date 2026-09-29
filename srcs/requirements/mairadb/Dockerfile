@@ -1,6 +1,11 @@
 FROM debian:bookworm-slim
 
-RUN apt-get update && apt-get install --no-install-recommends -y vim mariadb-server mariadb-client && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --no-install-recommends -y \
+	vim \
+	mariadb-client \
+	mariadb-server \
+	&& apt-get autoremove \
+	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/bin/
 
@@ -11,4 +16,4 @@ EXPOSE 3306
 
 ENTRYPOINT ["./script.sh"]
 
-CMD ["mariadb"]
+CMD ["mariadbd", "--user=mysql"]
