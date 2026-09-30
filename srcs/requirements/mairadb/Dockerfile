@@ -1,5 +1,8 @@
 FROM debian:bookworm-slim
 
+LABEL image.maintainer="ehossain" \
+	image.maintainer.email="ehossain@student.42.fr"
+
 RUN apt-get update && apt-get install --no-install-recommends -y \
 	vim \
 	mariadb-client \
@@ -15,6 +18,8 @@ COPY ./tools/script.sh .
 RUN chmod +x script.sh 
 
 EXPOSE 3306
+
+STOPSIGNAL SIGQUIT
 
 ENTRYPOINT ["/usr/bin/script.sh"]
 
