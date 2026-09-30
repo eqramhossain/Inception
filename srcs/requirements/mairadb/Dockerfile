@@ -9,12 +9,13 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 WORKDIR /usr/bin/
 
-COPY ./tools/script.sh .
 COPY ./conf/my.cnf /etc/mysql/
+
+COPY ./tools/script.sh .
 RUN chmod +x script.sh 
 
 EXPOSE 3306
 
-ENTRYPOINT ["./script.sh"]
+ENTRYPOINT ["/usr/bin/script.sh"]
 
 CMD ["mariadbd", "--user=mysql"]
