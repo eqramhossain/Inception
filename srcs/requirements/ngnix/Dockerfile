@@ -8,7 +8,7 @@ WORKDIR /usr/bin/
 RUN apt-get update && apt-get install --no-install-recommends -y ca-certificates vim curl nginx openssl && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 COPY ./tools/script.sh .
-RUN chmod +x /usr/bin/script.sh
+RUN chmod +x script.sh
 
 COPY ./conf/nginx.conf /etc/nginx/conf.d/nginx.conf
 
@@ -20,6 +20,6 @@ STOPSIGNAL SIGQUIT
 HEALTHCHECK --interval=30s --timeout=3s \
 	CMD curl -fsSk https://localhost:443 > /dev/null || exit 1
 
-ENTRYPOINT ["bash", "./script.sh"]
+ENTRYPOINT ["/usr/bin/script.sh"]
 
 CMD ["nginx", "-g", "daemon off;"]
