@@ -1,3 +1,5 @@
 #!/bin/bash
 
-exec "$@"
+set -e
+
+exec "/bin/bash"
