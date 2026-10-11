@@ -27,8 +27,14 @@ RUN curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-
 RUN sed -i 's|^listen = .*|listen = 0.0.0.0:9000|' /etc/php/8.2/fpm/pool.d/www.conf
 
 COPY ./tools/script.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/script.sh 
+RUN chmod +x /usr/local/bin/script.sh
+
+RUN mkdir -p /var/www/html/
+
+WORKDIR /var/www/html/
 
 EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/script.sh"]
+
+CMD ["php-fpm8.2", "-F"]
