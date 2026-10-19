@@ -25,8 +25,6 @@ done
 
 if ! wp core is-installed --allow-root
 then
-    echo "Installing WordPress..."
-
     wp core install \
         --allow-root \
         --url="$WP_URL" \
