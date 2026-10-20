@@ -1,14 +1,41 @@
 name: Inception
 
+secrets:
+  db_password:
+   file: ../secrets/db_password.txt
+  wp_admin_password:
+   file: ../secrets/wp_admin_password.txt
+
+networks:
+  inception_network:
+   name: inception_network
+
+volumes:
+  database_files:
+   name: database_files
+   driver: local
+   driver_opts:
+    type: none
+    o: bind
+    device: /home/ehossain/data/database_files
+
+  website_files:
+   name: website_files
+   driver: local
+   driver_opts:
+    type: none
+    o: bind
+    device: /home/ehossain/data/website_files
+
 services:
  mariadb:
   build: ./requirements/mairadb
-  image: mariadb:Inception
+  image: mariadb:inception
   container_name: mariadb
   volumes:
    - database_files:/var/lib/mysql/
   networks: 
-   - Inception_network
+   - inception_network
   env_file: .env
   restart: on-failure
   secrets: 
@@ -18,12 +45,12 @@ services:
   depends_on: 
    - mariadb
   build: ./requirements/wordpress
-  image: wordpress:Inception
+  image: wordpress:inception
   container_name: wordpress
   volumes:
    - website_files:/var/www/html
   networks: 
-   - Inception_network
+   - inception_network
   env_file: .env
   restart: on-failure
   secrets: 
@@ -34,37 +61,12 @@ services:
   depends_on: 
    - wordpress
   build: ./requirements/ngnix
-  image: nginx:Inception
+  image: nginx:inception
   container_name: nginx
   volumes:
    - website_files:/var/www/html
   networks: 
-   - Inception_network
-  env_file: .env
+   - inception_network
   ports: 
    - 443:443
   restart: on-failure
-
-volumes:
-  database_files:
-   driver: local
-   driver_opts:
-    type: none
-    o: bind
-    device: /home/ehossain/data/database_files
-
-  website_files:
-   driver: local
-   driver_opts:
-    type: none
-    o: bind
-    device: /home/ehossain/data/website_files
-
-networks:
-  Inception_network:
-
-secrets:
-  db_password:
-   file: ../secrets/db_password.txt
-  wp_admin_password:
-   file: ../secrets/wp_admin_password.txt
