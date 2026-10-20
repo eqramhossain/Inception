@@ -1,7 +1,0 @@
-FROM debian:bookworm
-
-RUN apt-get update && apt install nginx -y
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
