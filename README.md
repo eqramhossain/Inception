@@ -1,7 +1,26 @@
 This project has been created as part of the 42 curriculum by ehossain
 
-
 # Inception
+
+### Description
+This project is related to system administration by learing to use docker and container. Virtualization applications and services using docker. It project also aims to teach how Generally containers works what are the use case why use contaiers in the first place 
+An example is it removes the Questions of it works on my machine. 
+
+#### Vitual Machine vs Docker
+#### Secrets vs Environment Variables
+#### Docker Network vs Host Network
+#### Docker Volumes vs Bind Mounts
+
+### Instruction
+In this section i will talk about how to install docker and run this project i have used debian for this project so all the references will be for debain environment.
+
+follow this instructions form docker website to install docker and docker desktop on debian
+[How to install docker on debian](url) 
+
+to run this project we will use makefile and before comiling the project make sure to follow the USER_DOC.md and DEV_DOC.md you will need to configure an .env file and folder name secrets
+
+
+### Questions
 
 #### What is Docker ?
 Wikipedia defines Docker as

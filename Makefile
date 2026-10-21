@@ -6,6 +6,8 @@ all: $(NAME)
 $(NAME):
 	mkdir -p /home/ehossain/data/website_files
 	mkdir -p /home/ehossain/data/database_files
+	chmod +x ./srcs/requirements/tools/passwords.sh
+	bash ./srcs/requirements/tools/passwords.sh
 	$(CMD) up --build -d
 
 up:
