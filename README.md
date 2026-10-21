@@ -1,27 +1,101 @@
 This project has been created as part of the 42 curriculum by ehossain
 
-# Inception
-
 ### Description
-This project is related to system administration by learing to use docker and container. Virtualization applications and services using docker. It project also aims to teach how Generally containers works what are the use case why use contaiers in the first place 
-An example is it removes the Questions of it works on my machine. 
 
-#### Vitual Machine vs Docker
+Inception is a 42 project that teaches the basics of system administration  
+with Docker. The goal is to build and run a WordPress website inside a  
+virtual machine, with each service in its own container.
+
+The project uses three services:
+
+- NGINX handles HTTPS connections on port 443 using TLS 1.3.
+- WordPress and PHP-FPM run the website.
+- MariaDB stores the website’s posts, users, and settings.
+
+Each service is built from a custom Dockerfile. Docker Compose connects the  
+services through a Docker network. Two named volumes keep the database and  
+WordPress files, even when the containers are removed.
+
+This project helps me understand how containers, networks, storage, and  
+password management work together. Packaging services with their dependencies  
+also makes the setup easier to run on another machine.
+
+#### Virtual Machine vs Docker
+
+A virtual machine runs its own operating system and kernel. Docker containers  
+share the host’s kernel, so they usually need fewer resources and start faster.  
+In this project, Docker runs inside a Debian virtual machine.
+
 #### Secrets vs Environment Variables
+
+Environment variables hold settings such as database names and the website  
+address. Secrets provide passwords as files inside the containers that need  
+them. With Docker Compose, the original secret files must still be protected  
+on the host and kept out of Git.
+
 #### Docker Network vs Host Network
+
+A Docker bridge network lets the containers communicate using their service  
+names, while keeping their network separate from the host. Host networking  
+shares the host’s network directly. This project uses a Docker network and  
+publishes only NGINX’s port 443.
+
 #### Docker Volumes vs Bind Mounts
 
-### Instruction
-In this section i will talk about how to install docker and run this project i have used debian for this project so all the references will be for debain environment.
+A named volume is storage managed through Docker. A bind mount connects a  
+specific host file or folder directly to a container. Both can keep data after  
+a container is removed. This project uses two named volumes, with their data  
+stored under /home/ehossain/data on the virtual machine.
 
-follow this instructions form docker website to install docker and docker desktop on debian
-[How to install docker on debian](url) 
+### Instructions
 
-to run this project we will use makefile and before comiling the project make sure to follow the USER_DOC.md and DEV_DOC.md you will need to configure an .env file and folder name secrets
+1. Install the tools
 
+This project uses Debian. Install Docker Engine and the Docker Compose plugin  
+by following the [official Debian installation guide](https://docs.docker.com/engine/install/debian/).  
+Docker Desktop is not required.
+
+Install Git and Make as well:
+
+sudo apt update
+
+sudo apt install git make
+
+2. Download and configure the project
+
+git clone https://github.com/eqramhossain/Inception.git
+
+cd Inception
+
+Before starting:
+
+- Create the .env file with the settings required by the Compose file.
+- Create the secrets folder and the password files referenced by Compose.
+- Create the data folders required by the volume configuration under /home/ehossain/data.
+- Add the VM’s IP address and ehossain.42.fr to /etc/hosts on the computer  
+where you will open the website.
+
+See DEV_DOC.md for setup details and  
+USER_DOC.md for daily use. Do not commit passwords to Git.
+
+3. Build and run
+
+From the project folder, run the Makefile’s build/start target. If it is the  
+default target, use:
+
+make
+
+The Makefile should build the images and start the services with Docker Compose.
+
+4. Open the website
+
+- Website: https://ehossain.42.fr
+- Admin panel: https://ehossain.42.fr/wp-admin
+
+Log in with the WordPress admin account configured during setup. A self-signed  
+certificate may cause a browser trust warning.
 
 ### Questions
-
 #### What is Docker ?
 Wikipedia defines Docker as
 
@@ -106,29 +180,14 @@ example of some daemons are, `sshd` `dockerd` `syslogd` `httpd` `systemd` - the 
 
 #### What is PID 1 and why does it matter for docker containers ?
 
-
-
-### Bonus:
-#### What is a redis cache ? How to set up one for a WordPress website ?
-
-#### What is a FTP Server ?
-
-#### How to set up a FTP server container pointing to the volume of your WordPress website ?
-
-#### What is a static website ?
-
-#### What is and Adminer ?
-
-#### How to setup an Adminer ?
-
-#### What is the latest tag and why is it prohibitated ?
+#### What is the difference between a background process and a foreground process
 
 
 ---
 
 add user to `docker gourp` so we can use it without calling `sudo` everytime. `docker` need root permission any user added to `docker group` will have `root` privilege so be cautious.
 
-# Docker Commands
+# Docker Commands CLI
 
 to build an image for a specefic system 
 `docker build --platform linux/amd64 --no-cache -t my_image_name /path_to_Dockerfile_folder`
@@ -170,7 +229,7 @@ to run a container to restart automatically
 `docke run -d --restart unless-stoped --name docker_conatiner docker_image`
 
 to update an existing container 
-`docker update --restart unlesll-stopped --name docker_container_id/name`
+`docker update --restart unless-stopped --name docker_container_id/name`
 
 create a docker volume
 `docker volume create my_volume`
@@ -191,9 +250,101 @@ override environment variables at runtime using `docker run -e APP_ENV=test`
 
 inspect docker logs `docker logs <container_id>`
 
+inspect history of a docker images `docker image history image_id/name`
+
+The `docker run --rm` cmd automatically removes the container form your system as soon as it exits or stops running.
+
+to mount a volume with the `docker run`
+```
+docker run --mount type=volume,src=<volume-name>,dst=<mount-path>
+```
+
+check a container logs
+```
+docker container logs container_name/id
+docker container inspect container_name/id
+```
+
+To restart a existing container automatically 
+```
+docker stop container
+docker update --restart=always container_name/id
+```
+
+While creating a container 
+```
+docker run -d --restart=always  -p 443:443 --mount source=website_files,target=/var/www/html/ --name NGINX nginx_image:Inception
+```
+
+how to connect a existing container to a network
+```
+# create a network
+docker network create my_network
+docker network connect my_network container_id/name
+```
+
+to see all the running process inside a container
+```
+docker exec container_name ps aux
+```
 
 
 
+# Docker Volumes
+
+### What is Named Volumes
+in Docker, a **named volume** is a persistent data storage mechanism that is completely created and managed by the Docker engine. Unlike container filesystems, which are completely wiped out when a container is deleted, a named volume exists independently of any single container's lifecycle.
+
+You give a named volume a distinct, human-readable name (like `db_data` or `app_logs`). Docker then allocates a dedicated space for it inside a protected directory on the host machine (usually `/var/lib/docker/volumes/` on Linux)
+
+Create a docker volume
+```shell
+docker volume create my_volume
+```
+
+List volumes
+```shell
+docker volume ls
+```
+
+Display detailed infos
+```shell
+docker volume inspect name_vl
+```
+
+Remove a volume
+```
+docker volume remove name_vl
+```
+
+
+
+```Shell
+# 1. Create the directories on your host first (Docker won't auto-create them this way)
+mkdir -p /home/your_username/data/volume_one
+mkdir -p /home/your_username/data/volume_two
+
+# 2. Create the named volumes pointing to those directories
+docker volume create --driver local \
+  --opt type=none \
+  --opt o=bind \
+  --opt device=/home/your_username/data/volume_one \
+  volume_one
+
+docker volume create --driver local \
+  --opt type=none \
+  --opt o=bind \
+  --opt device=/home/your_username/data/volume_two \
+  volume_two
+```
+
+`--driver local`  is docker built in volume driver. It uses storage available on the docker host
+`--opt type=none`  specifies the mount type used by the Linux mount operation.
+
+`---opt o=bind`  is the value passed to the Linux mount operation, requesting a bind mount.
+A bind mount makes an existing directory accessible at another location in the filesystem.
+
+`--opt devide=/path` device tells the local driver which host directory to use as the source of the bind mount.
 
 # Dockerfile
 
@@ -472,7 +623,7 @@ docker image inspect --format '{{json .Config.Labels}}' my_nginx
 
 ### MAINTAINER - Identify the image's maintainer
 
-`MAINTAINER` was traditionally used to identify the person or organization maintaining a Docker image.
+`MAINTAINER` was traditionally used to identify the person or organization maintaining a Docker image. This instruction is deprecated in favor of using label.
 
 Example:
 ```Dockerfile
@@ -562,18 +713,195 @@ WORKDIR /path
 3. Combine related run instruction
 4. Use docker build cache for faster image building
 5. Use `COPY` instead of `ADD`
-6. Use exec form for CMD and ENTRYPOINT ? 
+6. Use exec form for `CMD` and `ENTRYPOINT` combine them
 7. Do not store secrets in your Dockerfile
 8. Add Metadata
-9. Use a .dockerignore file
+9. Use a `.dockerignore` file
 10. Clean Up Temporary Files 
 11. Run applications with appropriate privileges
 12. setup an user so the container doesn't run as the root user
 13. Do not use unnecessary background processes
 14. Understand `EXPOSE` versus published ports
 15. Use docker volumes
-16. Use HEALTHCHECK when it adds useful information
+16. Use `HEALTHCHECK` when it adds useful information
 17. Make your images reproducible and maintainable
+
+
+# NGINX configuration
+
+how to create a new certificate with openssl 
+[How to Create a self-signed SSL certificate](https://linuxize.com/post/creating-a-self-signed-ssl-certificate/)
+
+```bash
+openssl req -x509 rsa:4096 -sha256 -noenc -keyout server.key -out server.crt -days 3650 \
+-subj "/C=FR/ST=Paris/L=Paris/O=42paris/OU=Inception/CN=ehossian.42.fr"
+```
+
+The way nginx and its modules work is determined in the configuration file. By default, the configuration file is named `nginx.conf` and placed in the directory `/usr/local/nginx/conf`, `/etc/nginx`, or `/usr/local/etc/nginx`.
+
+The first file that nginx reads when it starts is `/etc/nginx/nginx.conf`. This file is maintained by Nginx package maintainers and it is recommended that administrators avoid editing this file unless they also follow changes made by upstream.
+
+It's advised to instead add customizations underneath of the `conf.d/` directory which is described below.
+
+nginx config files are written in blocks and inside your code block every line has to end with an `;` semicolone
+```conf
+server {
+	listen 443 ssl;	
+}
+```
+
+RFTM: [Beginners guide nginx](https://nginx.org/en/docs/beginners_guide.html)
+
+```conf
+server {
+	listen 443 ssl;
+	listen [::]443 ssl;
+	
+	server_name ehossain.42.fr;
+	
+	ssl_certificate /path_to_certificate ;
+	ssl_certificate_key /path_to_certificate_key;
+	ssl_protocols TLSv1.3;
+	
+	root /var/www/html;
+	index index.html index.php
+}
+```
+
+
+# CGI (Common Gateway Interface) and FastCGI
+CGI (Common Gateway Interface) and FastCGI are communication protocols that allow web servers to execute external programs and generate dynamic web content.  It is not a package or library, but an interface that bridges the gap between web servers and server-side applications.
+
+CGI is the original standard protocol for running external application scripts via a web server.
+
+### What is CGI
+CGI is the original standard protocol for running external application scripts via a web server. 
+
+- For every single HTTP request received the web server create a new independent os process.
+- The process loads the script, initializes the environment, processes the request, sends the response back to the web server, and then immediately shuts down.
+- The Problem: Creating and destroying a process for every request consumes massive CPU and memory overhead. This causes severe performance bottlenecks under high traffic.
+
+### What is FastCGI
+FastCGI is an upgraded, high-performance extension of CGI designed to fix those exact speed and scaling limitations. 
+
+- Process Model: : Instead of killing a process after one request, FastCGI uses long-running, persistent background worker processes or a process pool.
+- Lifecycle: : The web server passes multiple sequential requests to these already-running processes using sockets or TCP
+- Benefit: It eliminates the massive startup and teardown delay of creating new operating system processes, making it vastly faster and more scalable. A common modern example of this is PHP-FPM (FastCGI Process Manager).
+
+### What is PHP-FPM
+PHP-FPM (FastCGI Process Manager) is an implementation of the FastCGI protocol specifically designed for PHP. Unlike CGI or FastCGI, php-fpm is an actual executable program that manages PHP processes on the server.
+
+1. PHP-FPM runs as a separate daemon process on the server.
+2. Nginx forwards PHP requests to php-fpm.
+3. PHP-FPM executes the PHP application, processes the request, and sends the response back to nginx.
+
+### Connecting PHP-FPM to NGINX
+```conf
+server {
+    listen 80;
+    server_name example.com;
+
+    root /var/www/demo/public;
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass 127.0.0.1:9000; # PHP-FPM listening address
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+```
+
+##### Key Points in the Configuration:
+
+- `try_files` Directive: Ensures that nginx serves static files if they exist, or passes the request to application index.php for routing.
+- `fastcgi_pass`  Specifies the address where php-fpm is listening.
+- `fastcgi_param` Passes the script file name to php-fpm for execution.
+
+
+# Proxy Servers Explained
+
+[Proxy servers explained | Cloudflare](https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/)
+### What is a Proxy Server ?
+A forward proxy, often called a proxy, proxy server, or web proxy, is a server that sits in front of a group of client machines. When those computers make requests to sites and services on the Internet, the proxy server intercepts those requests and then communicates with web servers on behalf of those clients, like a middleman.
+
+### What is a reverse Proxy and how is it different ?
+A reverse proxy is a server that sits in front of one or more web servers, intercepting requests from clients. This is different from a forward proxy, where the proxy sits in front of the clients. With a reverse proxy, when clients send requests to the origin server of a website, those requests are intercepted at the network edge by the reverse proxy server. The reverse proxy server will then send requests to and receive responses from the origin server.
+
+The difference between a forward and reverse proxy is subtle but important. A simplified way to sum it up would be to say that a forward proxy sits in front of a client and ensures that no origin server ever communicates directly with that specific client. On the other hand, a reverse proxy sits in front of an origin server and ensures that no client ever communicates directly with that origin server.
+
+# MariaDB
+
+SQL(Structured Query Language): The universal programming language used to manage, query, and manipulate data within any relational database.
+
+Mariadb: The actual software applications (database engines) that store the data and execute the SQL commands
+
+MariaDB Server is a general purpose open source relational database management system. It’s one of the most popular database servers in the world, with notable users including `Wikipedia`, `WordPress.com` and `Google`.
+
+install mariadb in dockerfile `apt-get install mariadb-server mariadb-client`. 
+
+Where does MariaDB store its database ?
+MariaDB doesn't store your databases inside the executable. It has a data directory, commonly: `/var/lib/mysql` .
+
+An excelent guide to follow [Basic guide by mariadb](https://mariadb.com/docs/server/mariadb-quickstart-guides/basics-guide)
+
+### [[MySQL]]
+
+Some MySQL commands/statements to manupulate a db(data base)
+
+launch `mariadb`. `SQL` statements are case insensetive but it is a widely accepted convention to write `SQL` keywords in `UPPERCASE` and identifiers in `lowercase` to make queries readable
+
+Create a new db `CREATE DATABASE my_db;`  
+
+the `;` semicolone is important it tells the end of cmd.
+
+Delete a db `DROP DATABASE my_db;`
+
+Work inside a db first `USE my_db;`
+
+Create a new table inside a db `CREATE TABLE my_table;`
+
+Delete a table `DROP TABLE my_table;`
+
+Add, delete, or modify columns in an existing table 
+`ALTER TABLE my_table ADD column_name datatype;`
+
+The `INSERT INTO` statement is used to insert new records in a table.
+```sql
+INSERT INTO my_table
+VALUES (value1, value2, value3);
+```
+
+The `SELECT` statement is used to select data from a database.
+```sql
+ SELECT CustomerName, City FROM Customers; 
+```
+
+
+# Wordpress + php-fpm
+
+```bash
+docker exec container_name wp db check --allow-root --path=/var/www/html
+```
+
+
+# How to configure a domain name
+
+Use the `hostnamectl` command to permanently change your hostname to match your desired name
+
+```
+sudo hostnamectl set-hostname ://ehossain.42.fr
+
+# verify the configuration
+hostname -f
+dnsdomainname
+```
+
 
 # Docker Network
 
@@ -582,47 +910,62 @@ Docker daemon automatically create three defaults network. You can check them wi
 2. host
 3. none
 
+Create a new network 
+```shell
+docker network create new_network
+```
 
+See all the network created by network
+```
+docker network ls
+```
 
+To remove one ot multiple networks
+```
+docker network rm name_network # remove one network
+docker network prune # remove all unused network
+```
 
-
-
+Inspect network config
+```
+docker network inspect name_network
+```
 
 # Docker-compose
 
 
---- 
 
+# Subject Requirements
 ### Must and Must not
 
-- [ ] Must use `docker compose`
-- [ ] Each `docker image` must have the same name as its corresponding service
-- [ ] Each service has to run in a dedicated container
-- [ ] You also have to write your own `Dockerfiles` one per service
-- [ ] The `Dockerfiles` must be called in your `docker-compose.yaml` by your `makefile`
-- [ ] It is forbidden to pull ready made `docker image` and using `docker hub`
-- [ ] Must use environment variables in a `.env` file.
-- [ ] Must user `docker secrets` to store confidential information.
-- [ ] Your `NGINX` container must be the only entrypoint into your infrastructure via the port `443` only, using the `TLSv1.3` protocol.
+- [x] Must use `docker compose`
+- [x] Each `docker image` must have the same name as its corresponding service
+- [x] Each service has to run in a dedicated container
+- [x] You also have to write your own `Dockerfiles` one per service
+- [x] The `Dockerfiles` must be called in your `docker-compose.yaml` by your `makefile`
+- [x] It is forbidden to pull ready made `docker image` and using `docker hub`
+- [x] Must use environment variables in a `.env` file.
+- [x] Must user `docker secrets` to store confidential information.
+- [x] Your `NGINX` container must be the only entrypoint into your infrastructure via the port `443` only, using the `TLSv1.3` protocol.
 
 ### Container Specefic Rules
 
-- [ ] A container that contains `NGINX` with `TLSv1.3`.
-- [ ] A container that contains `WordPress + php-fpm` (it must be installed and configured) without `NGINX`.
-- [ ] A container that contains `MariaDB` without `NGINX`
-- [ ] Containers must restart in case of a crash.
+- [x] A container that contains `NGINX` with `TLSv1.3`.
+- [x] A container that contains `WordPress + php-fpm` (it must be installed and configured) without `NGINX`.
+- [x] A container that contains `MariaDB` without `NGINX`
+- [x] Containers must restart in case of a crash.
 
 ### Volume Specefic Rules
 
-- [ ] A volume that contains `WordPress`  database.
-	- [ ] In the `WordPress` database there must be two user, one of them being the administrator.
-- [ ] A second volume that contains `WordPress`  website files.
-- [ ] You must use Docker named volumes for these two persistent storages. Bind mounts are not allowed for these volumes.
-- [ ] Both named volumes must store their data inside `/home/ehossain/data` on the host machine.
+- [x] A volume that contains `WordPress`  database.
+	- [x] In the `WordPress` database there must be two user, one of them being the administrator.
+- [x] A second volume that contains `WordPress`  website files.
+- [x] You must use Docker named volumes for these two persistent storages. Bind mounts are not allowed for these volumes.
+- [x] Both named volumes must store their data inside `/home/ehossain/data` on the host machine.
 
 ### Network Specefic Rules
 
-- [ ] A `docker-network` that establishes the connection between containers.
+- [x] A `docker-network` that establishes the connection between containers.
 
 ### Bonus Part
 
@@ -636,64 +979,38 @@ Docker daemon automatically create three defaults network. You can check them wi
 
 # Resouces
 
-
-[Docker Curriculum | Docker Curriculum](https://docker-curriculum.com/)
-
+[Docker Curriculum | Docker Curriculum](https://docker-curriculum.com/) 
 [Docker Crash Course #1 - What is Docker? - YouTube](https://www.youtube.com/watch?v=31ieHmcTUOk&list=PL4cUxeGkcC9hxjeEtdHFNYMtCpjNBm3h7) 
-
 [Optimize Your Deployment With Docker Containers - OpenClassrooms](https://openclassrooms.com/fr/courses/7905646-optimize-your-deployment-with-docker-containers) 
-
 [Dockerfile reference | Docker Docs](https://docs.docker.com/reference/dockerfile)
-
 [Writing a Dockerfile: Beginners to Advanced - DEV Community](https://dev.to/prodevopsguytech/writing-a-dockerfile-beginners-to-advanced-31ie) 
-
 [Reference documentation | Docker Docs](https://docs.docker.com/reference/) 
-
 [docker_cheatsheet.pdf](https://docs.docker.com/get-started/docker_cheatsheet.pdf) 
-
 [Docker Best Practices: Choosing Between RUN, CMD, and ENTRYPOINT | Docker](https://www.docker.com/blog/docker-best-practices-choosing-between-run-cmd-and-entrypoint/) 
-
-[Docker Run Command with Examples | Linuxize](https://linuxize.com/post/docker-run-command/)
-
+[Docker Run Command with Examples | Linuxize](https://linuxize.com/post/docker-run-command/) 
 [How to Build Docker Images with Dockerfile | Linuxize](https://linuxize.com/post/how-to-build-docker-images-with-dockerfile/) 
-
 [Docker Compose: Define and Run Multi-Container Apps | Linuxize](https://linuxize.com/post/docker-compose/) 
-
 [How to Remove Docker Images, Containers, Volumes, and Networks | Linuxize](https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/) 
-
 [Docker - Container for NGINX - GeeksforGeeks](https://www.geeksforgeeks.org/devops/docker-container-for-nginx/) 
-
 [Using The NGINX Docker Image | Octopus blog](https://octopus.com/blog/using-nginx-docker-image) 
-
 [How to Use Docker Volumes for Persistent Data](https://oneuptime.com/blog/post/2026-02-02-docker-volumes-persistent-data/view) 
-
 [How to Run Nginx in Docker](https://oneuptime.com/blog/post/2026-01-25-nginx-docker/view)
-
 [Storage | Docker Docs](https://docs.docker.com/engine/storage/) [Volumes | Docker Docs](https://docs.docker.com/engine/storage/volumes/) 
-
 [Building best practices | Docker Docs](https://docs.docker.com/build/building/best-practices/) 
-
 [Compose file reference | Docker Docs](https://docs.docker.com/reference/compose-file/) 
-
 [Dockerfile reference | Docker Docs](https://docs.docker.com/reference/dockerfile/?utm_source=chatgpt.com) 
-
 [Writing a Dockerfile | Docker Docs](https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/) 
-
 [Networking overview | Docker Docs](https://docs.docker.com/engine/network/) 
-
 [What Is Docker Networking? A Practical Guide](https://www.aquasec.com/cloud-native-academy/docker-container/docker-networking/) 
-
 [Networking in Compose | Docker Docs](https://docs.docker.com/compose/how-tos/networking/) 
-
 [Bridge network driver | Docker Docs](https://docs.docker.com/engine/network/drivers/bridge/) 
-
 [Introduction to Docker Networking | Refine](https://refine.dev/blog/docker-networking/#bridge-docker0) 
-
 [Manage sensitive data with Docker secrets | Docker Docs](https://docs.docker.com/engine/swarm/secrets/) 
-
 [Understanding the Nginx Configuration File Structure and Configuration Contexts | DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-the-nginx-configuration-file-structure-and-configuration-contexts) 
-
 [Beginner’s Guide](https://nginx.org/en/docs/beginners_guide.html) [Configuring HTTPS servers](https://nginx.org/en/docs/http/configuring_https_servers.html) 
-
 [Configuring HTTPS/TLS on nginx: A Complete Guide for Securing Web Traffic](https://travishorn.com/configuring-httpstls-on-nginx-a-complete-guide-for-securing-web-traffic/)
 
+
+
+
+ The irony of humanity digging gold out of the earth just to bury it away in a vault is profoundly moving. It shows how deeply we misunderstand true value and the art of living. What people chase as 'luxury' is often just a lazy substitute for a meaningful life. We are left with a constant, lingering feeling that something is missing—and what we are truly missing is our connection to nature. 
