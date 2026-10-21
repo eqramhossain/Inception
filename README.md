@@ -57,16 +57,16 @@ Docker Desktop is not required.
 
 Install Git and Make as well:
 
+```
 sudo apt update
-
 sudo apt install git make
-
+```
 2. Download and configure the project
 
+```
 git clone https://github.com/eqramhossain/Inception.git
-
 cd Inception
-
+```
 Before starting:
 
 - Create the .env file with the settings required by the Compose file.
@@ -90,7 +90,7 @@ The Makefile should build the images and start the services with Docker Compose.
 4. Open the website
 
 - Website: https://ehossain.42.fr
-- Admin panel: https://ehossain.42.fr/wp-admin
+- Admin panel: https://ehossain.42.fr/wp-admin.php
 
 Log in with the WordPress admin account configured during setup. A self-signed  
 certificate may cause a browser trust warning.

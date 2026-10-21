@@ -4,11 +4,9 @@ What does this project do?
 
 This project runs a WordPress website using three services:
 
-● NGINX accepts secure HTTPS connections using TLS 1.3.
-
-● WordPress and PHP-FPM run the website and its admin panel.
-
-● MariaDB stores posts, users, and website settings.
+- NGINX accepts secure HTTPS connections using TLS 1.3.
+- WordPress and PHP-FPM run the website and its admin panel.
+- MariaDB stores posts, users, and website settings.
 
 Start and stop
 
@@ -27,9 +25,8 @@ Run the start command again to bring the website back online.
 
 Open the website
 
-● Website: https://ehossain.42.fr
-
-● Admin panel: https://ehossain.42.fr/wp-admin
+- Website: https://ehossain.42.fr
+- Admin panel: https://ehossain.42.fr/wp-admin.php
 
 The domain must point to the virtual machine’s IP address on the computer  
 where you open the browser. Log in with your WordPress admin account.  

@@ -7,9 +7,10 @@ plugin, Git, and Make installed. Make sure Docker is running.
 
 2. Clone the project and enter its folder:
 
+```
 git clone https://github.com/eqramhossain/Inception.git
-
 cd Inception
+```
 
 3. Create the .env file at the location used by your Compose file. Fill in  
 the database settings, WordPress account details, and website domain.
@@ -79,11 +80,10 @@ configuration files, and setup scripts.
 
 Docker volumes keep application data outside the containers:
 
-● WordPress files are stored at /var/www/html inside its container.
+- WordPress files are stored at /var/www/html inside its container.
+- MariaDB data is stored at /var/lib/mysql inside its container.
+- The Compose volume settings show the matching folders on the VM.  
 
-● MariaDB data is stored at /var/lib/mysql inside its container.
-
-● The Compose volume settings show the matching folders on the VM.  
 For this project, check that they are under /home/ehossain/data/.
 
 Stopping or rebuilding containers keeps data stored in these volumes.  
