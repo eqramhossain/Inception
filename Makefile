@@ -26,6 +26,8 @@ password:
 	bash ./srcs/setup_passwords.sh
 
 vide: fclean
+	rm -rf ./secrets/
+	rm -f ./srcs/.env
 	sudo rm -rf /home/ehossain/data/website_files/
 	sudo rm -rf /home/ehossain/data/database_files/
 

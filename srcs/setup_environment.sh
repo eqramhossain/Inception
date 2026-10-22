@@ -24,5 +24,3 @@ WP_ADMIN_EMAIL=jhonthedon@yopmail.com
 EOF
 
 fi
-
-echo ".env file already exists"
