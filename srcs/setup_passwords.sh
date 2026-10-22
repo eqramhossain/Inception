@@ -11,3 +11,5 @@ fi
 if [ ! -f ../secrets/wp_admin_password.txt ]; then
 	openssl rand -hex 16 > ./secrets/wp_admin_password.txt
 fi
+
+echo "db_password and wp_admin_password files already exists"

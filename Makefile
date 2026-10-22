@@ -1,5 +1,5 @@
 NAME = inception
-CMD = docker compose -f ./srcs/compose.yaml
+CMD = docker compose -f ./srcs/docker-compose.yml
 
 all: $(NAME)
 
