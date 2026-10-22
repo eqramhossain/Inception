@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -f .env ]; then
+
+	echo ".env file does not found, creating file"
+
+	if [ ! -d ../secrets ]; then
+		echo "password files not found ../secrets"
+	fi
+
+	cat > ".env" << 'EOF'
+	# mariadb environment variable
+	DB_NAME=wordpress
+	DB_USER=wpuser
+	DB_PASSWORD="$(cat /run/secrets/db_password)"
+	DB_PASSWORD_FILE=/run/secrets/db_password
+	DB_HOST=Mariadb:3306
+
+	# wordpress environment variable
+	WP_URL=https://ehossain.42.fr
+	WP_TITLE=Inception
+	WP_ADMIN_USER=Jhon
+	WP_ADMIN_PASSWORD="$(cat /run/secrets/wp_admin_password)"
+	WP_ADMIN_PASSWORD_FILE=/run/secrets/wp_admin_password
+	WP_ADMIN_EMAIL=jhonthedon@yopmail.com
+
+	EOF
+fi
