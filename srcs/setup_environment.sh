@@ -2,15 +2,11 @@
 
 set -e
 
-if [ ! -f .env ]; then
+if [ ! -f ./srcs/.env ]; then
 
-	echo ".env file does not found, creating file"
+	touch ./srcs/.env
 
-	if [ ! -d ../secrets ]; then
-		echo "password files not found ../secrets"
-	fi
-
-	cat > ".env" << 'EOF'
+	cat > "./srcs/.env" << 'EOF'
 	# mariadb environment variable
 	DB_NAME=wordpress
 	DB_USER=wpuser
@@ -25,6 +21,6 @@ if [ ! -f .env ]; then
 	WP_ADMIN_PASSWORD="$(cat /run/secrets/wp_admin_password)"
 	WP_ADMIN_PASSWORD_FILE=/run/secrets/wp_admin_password
 	WP_ADMIN_EMAIL=jhonthedon@yopmail.com
+EOF
 
-	EOF
 fi

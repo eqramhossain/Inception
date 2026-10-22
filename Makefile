@@ -19,7 +19,7 @@ check:
 
 environment:
 	chmod +x ./srcs/setup_environment.sh
-	bash ./srcs/setup_passwords.sh
+	bash ./srcs/setup_environment.sh
 
 password:
 	chmod +x ./srcs/setup_passwords.sh
