@@ -18,7 +18,7 @@ STOPSIGNAL SIGQUIT
 
 # -f fail -s silent -S show-error -k insecure
 HEALTHCHECK --interval=30s --timeout=3s \
-	CMD curl -fsSk https://ehossain.42.fr:443 > /dev/null || exit 1
+	CMD curl -fsSk 127.0.0.1:443 > /dev/null || exit 1
 
 ENTRYPOINT ["/usr/bin/script.sh"]
 
