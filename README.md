@@ -1064,3 +1064,5 @@ docker network inspect name_network
 [Beginner’s Guide](https://nginx.org/en/docs/beginners_guide.html) [Configuring HTTPS servers](https://nginx.org/en/docs/http/configuring_https_servers.html) 
 
 [Configuring HTTPS/TLS on nginx: A Complete Guide for Securing Web Traffic](https://travishorn.com/configuring-httpstls-on-nginx-a-complete-guide-for-securing-web-traffic/)
+
+AI(Artificial Intelligence) was used in this project to help me find all the explanation, find ressources from internet.
