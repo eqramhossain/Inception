@@ -21,6 +21,10 @@ WP_ADMIN_USER=Jhon
 WP_ADMIN_PASSWORD="$(cat /run/secrets/wp_admin_password)"
 WP_ADMIN_PASSWORD_FILE=/run/secrets/wp_admin_password
 WP_ADMIN_EMAIL=jhonthedon@yopmail.com
+
+WP_USER=bigboss
+WP_USER_EMAIL=bigboss@yopmain.com
+WP_USER_PASSWORD="$(cat /run/secrets/wp_user_password)"
 EOF
 
 fi

@@ -21,7 +21,7 @@ environment:
 	chmod +x ./srcs/setup_environment.sh
 	bash ./srcs/setup_environment.sh
 
-password:
+secrets:
 	chmod +x ./srcs/setup_passwords.sh
 	bash ./srcs/setup_passwords.sh
 
@@ -38,6 +38,8 @@ clean:
 	$(CMD) down --rmi all
 
 fclean:
+	rm -rf ./secrets/
+	rm -f ./srcs/.env
 	$(CMD) down --rmi all --volumes
 
 re: fclean all
