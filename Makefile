@@ -38,8 +38,6 @@ clean:
 	$(CMD) down --rmi all
 
 fclean:
-	rm -rf ./secrets/
-	rm -f ./srcs/.env
 	$(CMD) down --rmi all --volumes
 
 re: fclean all
